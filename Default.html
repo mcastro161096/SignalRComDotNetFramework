@@ -59,10 +59,24 @@
                         moveShapeHub.server.updateModel(shapeModel);
                     }
                 });
-            })
+
+                $("#disconnet").click(function () {
+                    $.connection.hub.stop();
+                });
+                })
                 .fail(function () {
                     alert("Connection failed.");
                 });
+
+            $connection.hub.disconnected(function () {
+                $("#msgwindow").val($("#msgwindow").val() + "Disconnected\n");
+                setTimeout(function () {
+                    $.connection.hub.start()
+                        .done(function () {
+                            $("#msgwindow").val($("#msgwindow").val() + "Auto Reconnected\n");
+                        });
+                }, 5000);
+            });
         });
 
 
@@ -93,6 +107,7 @@
 
     </script>
     <textarea id="msgwindow"></textarea>
+    <input type="button" id="disconnect" value="Disconnect" />
     <div id="shape"></div>
     <!--<div id="div1">
     <textarea id="text"></textarea>
