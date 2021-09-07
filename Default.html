@@ -60,7 +60,7 @@
                     }
                 });
 
-                $("#disconnet").click(function () {
+                $("#disconnect").click(function () {
                     $.connection.hub.stop();
                 });
                 })
@@ -68,7 +68,7 @@
                     alert("Connection failed.");
                 });
 
-            $connection.hub.disconnected(function () {
+            $.connection.hub.disconnected(function () {
                 $("#msgwindow").val($("#msgwindow").val() + "Disconnected\n");
                 setTimeout(function () {
                     $.connection.hub.start()
@@ -76,6 +76,14 @@
                             $("#msgwindow").val($("#msgwindow").val() + "Auto Reconnected\n");
                         });
                 }, 5000);
+            });
+
+            $.connection.hub.reconnected(function () {
+                alert("Reconnected.");
+            });
+
+            $.connection.hub.connectionSlow(function () {
+                alert("Connection slow.");
             });
         });
 
