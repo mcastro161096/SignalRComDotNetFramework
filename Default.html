@@ -24,6 +24,11 @@
             justify-content: center;
             align-items: center;
         }
+
+        #msgwindow{
+            width:300px;
+            height:50px;
+        }
     </style>
 </head>
 <body>
@@ -35,57 +40,62 @@
     <script src="/signalr/hubs"></script>
 
     <script>
+        $(function () {
+            var moveShapeHub = $.connection.moveShapeHub,
+                $shape = $("#shape"),
+                shapeModel = {
+                    left: 0,
+                    top:0
+                };
+            moveShapeHub.client.updateShape = function (model) {
+                shapeModel = model;
+                $shape.css({ left: model.left, top: model.top -50});
+            };
+            $.connection.hub.start().done(function () {
+                $("#msgwindow").val("Conected\n");
+                $shape.draggable({
+                    drag: function () {
+                        shapeModel = $shape.offset();
+                        moveShapeHub.server.updateModel(shapeModel);
+                    }
+                });
+            })
+                .fail(function () {
+                    alert("Connection failed.");
+                });
+        });
+
+
         //$(function () {
         //    var moveShapeHub = $.connection.moveShapeHub,
-        //        $shape = $("#shape"),
-        //        shapeModel = {
-        //            left: 0,
-        //            top:0
-        //        };
+        //        $shape = $("#text")
+        //    textModel =
+        //    {
+        //        ptext: '',
+        //    };
         //    moveShapeHub.client.updateShape = function (model) {
-        //        shapeModel = model;
-        //        $shape.css({ left: model.left, top: model.top });
+        //        textModel = model;
+        //        $shape.val = model.ptext;
+        //        document.getElementById("text").value = model.ptext;
         //    };
         //    $.connection.hub.start().done(function () {
-        //        $shape.draggable({
-        //            drag: function () {
-        //                shapeModel = $shape.offset();
-        //                moveShapeHub.server.updateModel(shapeModel);
-        //            }
+
+        //        $shape.keyup(function () {
+        //            textModel.ptext = document.getElementById("text").value;
+        //            moveShapeHub.server.updateModel(textModel);
+        //            console.log(textModel);
+
         //        });
+
         //    });
         //});
 
 
-        $(function () {
-            var moveShapeHub = $.connection.moveShapeHub,
-                $shape = $("#text")
-            textModel =
-            {
-                ptext: '',
-            };
-            moveShapeHub.client.updateShape = function (model) {
-                textModel = model;
-                $shape.val = model.ptext;
-                document.getElementById("text").value = model.ptext;
-            };
-            $.connection.hub.start().done(function () {
-
-                $shape.keyup(function () {
-                    textModel.ptext = document.getElementById("text").value;
-                    moveShapeHub.server.updateModel(textModel);
-                    console.log(textModel);
-
-                });
-
-            });
-        });
-
-
     </script>
-    <!--<div id="shape"></div>-->
-    <div id="div1">
+    <textarea id="msgwindow"></textarea>
+    <div id="shape"></div>
+    <!--<div id="div1">
     <textarea id="text"></textarea>
-    </div>
+    </div>-->
 </body>
 </html>

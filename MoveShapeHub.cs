@@ -5,17 +5,17 @@ namespace SignalRComDotNetFramework
 {
     public class MoveShapeHub : Hub
     {
-        //public void UpdateModel(ShapeModel clientModel)
-        //{
-        //    clientModel.LastUpdateBy = Context.ConnectionId;
-        //    Clients.AllExcept(clientModel.LastUpdateBy).updateShape(clientModel);
-        //}
-
-        public void UpdateModel(TextModel textModel)
+        public void UpdateModel(ShapeModel clientModel)
         {
-            textModel.LastUpdateBy = Context.ConnectionId;
-            Clients.AllExcept(textModel.LastUpdateBy).updateShape(textModel);
+            clientModel.LastUpdateBy = Context.ConnectionId;
+            Clients.AllExcept(clientModel.LastUpdateBy).updateShape(clientModel);
         }
+
+        //public void UpdateModel(TextModel textModel)
+        //{
+        //    textModel.LastUpdateBy = Context.ConnectionId;
+        //    Clients.AllExcept(textModel.LastUpdateBy).updateShape(textModel);
+        //}
 
         public class ShapeModel
         {
